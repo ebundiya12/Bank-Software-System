@@ -1,11 +1,11 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SavingsTest {
 	public static final String ID = "12345678";
-	public static final String APR = "1%";
+	public static final String APR = "1.0";
 	public static final String BALANCE = "0.0";
 	public static final String TYPE = "savings";
 	Savings savings;
@@ -13,8 +13,8 @@ public class SavingsTest {
 
 	@BeforeEach
 	void setUp() {
-		savings = new Savings(ID, APR, BALANCE);
 		bank = new Bank();
+		savings = new Savings(ID, APR, BALANCE);
 	}
 
 	@Test
@@ -24,7 +24,7 @@ public class SavingsTest {
 
 	@Test
 	void savings_account_has_apr() {
-		assertEquals(APR, savings.getApr());
+		assertEquals(APR, Double.toString(savings.getApr()));
 	}
 
 	@Test
@@ -34,34 +34,25 @@ public class SavingsTest {
 
 	@Test
 	void savings_account_has_balance() {
-		assertEquals(BALANCE, savings.getBalance());
+		assertEquals(BALANCE, Double.toString(savings.getBalance()));
 	}
 
 	@Test
-	void created_savings_account_is_stored_in_the_bank() {
+	void savings_account_designated_opening_balance_is_zero() {
+		boolean actual = savings.openingBalance(0);
+		assertTrue(actual);
+	}
+
+	@Test
+	void savings_account_opening_balance_must_be_zero() {
+		boolean actual = savings.openingBalance(200);
+		assertFalse(actual);
+	}
+
+	@Test
+	void successfully_create_savings_account() {
 		savings.create(bank, ID, APR, BALANCE);
 		assertEquals(ID, bank.getAccounts().get(ID).getId());
-	}
-
-	@Test
-	void savings_deposit_adds_accurate_amount_to_account_balance() {
-		savings.deposit(100);
-		assertEquals("100.0", savings.getBalance());
-
-	}
-
-	@Test
-	void savings_withdraw_is_accurate_when_there_is_enough_money_in_account() {
-		savings.deposit(100);
-		savings.withdraw(50);
-		assertEquals("50.0", savings.getBalance());
-
-	}
-
-	@Test
-	void savings_cannot_withdraw_more_than_amount_in_account() {
-		savings.withdraw(50);
-		assertEquals(BALANCE, savings.getBalance());
 	}
 
 }

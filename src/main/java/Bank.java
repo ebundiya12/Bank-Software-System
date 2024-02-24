@@ -22,10 +22,6 @@ public class Bank {
 
 	}
 
-	public void account_withdrawal(String q_id, int amount) {
-		accounts.get(q_id).withdraw(amount);
-	}
-
 	public boolean accountExistsById(String id) {
 		return accounts.get(id) != null;
 	}
@@ -34,4 +30,8 @@ public class Bank {
 		return accounts.get(q_id).withinMaximumDeposit(amount);
 	}
 
+	public void accountDeposit(String q_id, String amt) {
+		double amount = Double.parseDouble(amt);
+		accounts.get(q_id).deposit(amount);
+	}
 }

@@ -1,17 +1,22 @@
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 class Account {
 
 	public List<Account> all_accounts;
-	protected String balance;
-	protected String apr;
+	protected double balance;
+	protected double apr;
 	protected String id;
 	protected String type;
+	DecimalFormat decimalFormat;
 
-	Account(String id, String apr, String balance) {
-		this.balance = balance;
-		this.apr = apr;
+	Account(String id, String apr, String bal) {
+		decimalFormat = new DecimalFormat("0.00");
+		decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+		this.balance = Double.parseDouble(decimalFormat.format(Double.parseDouble(bal)));
+		this.apr = Double.parseDouble(apr);
 		this.id = id;
 		all_accounts = new ArrayList<>();
 	}
@@ -32,11 +37,12 @@ class Account {
 		return type;
 	}
 
-	public String getApr() {
+	public double getApr() {
 		return apr;
 	}
 
-	String getBalance() {
+	double getBalance() {
+		balance = Double.parseDouble(decimalFormat.format(balance));
 		return balance;
 	}
 
@@ -44,24 +50,8 @@ class Account {
 		return id;
 	}
 
-	public void deposit(int amount) {
-		double bal = Double.parseDouble(balance);
-		bal += amount;
-		balance = Double.toString(bal);
-
-	}
-
-	public void withdraw(int amount) {
-		double bal = Double.parseDouble(balance);
-		if (amount <= bal) {
-			bal = bal - amount;
-			balance = Double.toString(bal);
-		} else {
-			bal = 0;
-			balance = Double.toString(bal);
-			System.err.println("withdraw amount too high");
-		}
-
+	public void deposit(double amount) {
+		this.balance += amount;
 	}
 
 	public boolean allowsDeposit() {
@@ -75,4 +65,9 @@ class Account {
 	public boolean withinOpeningBalance(double parseDouble) {
 		return (parseDouble == 0);
 	}
+
+	public boolean openingBalance(double i) {
+		return (i == 0);
+	}
+
 }
