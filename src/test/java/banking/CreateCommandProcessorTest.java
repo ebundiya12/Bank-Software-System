@@ -1,3 +1,5 @@
+package banking;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +36,7 @@ public class CreateCommandProcessorTest {
 	@Test
 	void create_command_creates_correct_account_type() {
 		commandProcessor.process(create_input);
-		assertEquals("Savings", bank.getAccounts().get(ID_1).type());
+		assertEquals("banking.Savings", bank.getAccounts().get(ID_1).type());
 
 	}
 

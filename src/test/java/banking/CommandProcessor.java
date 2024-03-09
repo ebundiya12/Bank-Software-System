@@ -1,3 +1,5 @@
+package banking;
+
 public class CommandProcessor {
 	public static final String CREATE = "create";
 	public static final String DEPOSIT = "deposit";
