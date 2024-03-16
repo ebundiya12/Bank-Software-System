@@ -1,5 +1,3 @@
-package banking;
-
 public class DepositValidator extends CommandValidator {
 
 	DepositValidator(Bank bank) {
