@@ -1,3 +1,5 @@
+package banking;
+
 public class CommandValidator {
 
 	protected final Bank bank;
@@ -36,7 +38,7 @@ public class CommandValidator {
 	}
 
 	public boolean validate_type(String type_String) {
-		return (type_String.equalsIgnoreCase("Savings") || type_String.equalsIgnoreCase("checking")
+		return (type_String.equalsIgnoreCase("banking.Savings") || type_String.equalsIgnoreCase("checking")
 				|| type_String.equalsIgnoreCase("cd"));
 	}
 
