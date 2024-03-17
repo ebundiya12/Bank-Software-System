@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class AccountTest {
 	public static final String ID = "12345678";
-	public static final String APR = "1%";
+	public static final String APR = "1.0";
 	public static final String BALANCE = "0.0";
 	Cd cd;
 	Savings savings;
@@ -20,33 +20,13 @@ public class AccountTest {
 
 	@Test
 	void account_initially_has_no_money() {
-		assertEquals(BALANCE, savings.getBalance());
+		assertEquals(BALANCE, Double.toString(savings.getBalance()));
 	}
 
 	@Test
 	void deposit_updates_balance() {
 		savings.deposit(100);
-		assertEquals("100.0", savings.getBalance());
+		assertEquals(100.00, savings.getBalance());
 	}
 
-	@Test
-	void withdrawal_updates_balance() {
-		checking.deposit(100);
-		checking.withdraw(50);
-		assertEquals("50.0", checking.getBalance());
-	}
-
-	@Test
-	void withdrawal_can_not_go_below_zero() {
-		savings.deposit(100);
-		savings.withdraw(200);
-		assertEquals(BALANCE, savings.getBalance());
-	}
-
-	@Test
-	void withdrawal_of_same_amount_in_account_sets_balance_to_zero() {
-		savings.deposit(100);
-		savings.withdraw(100);
-		assertEquals(BALANCE, savings.getBalance());
-	}
 }

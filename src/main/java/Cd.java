@@ -11,13 +11,8 @@ public class Cd extends Account {
 	}
 
 	@Override
-	public String getApr() {
+	public double getApr() {
 		return apr;
-	}
-
-	@Override
-	String getBalance() {
-		return balance;
 	}
 
 	@Override
@@ -38,5 +33,10 @@ public class Cd extends Account {
 	@Override
 	public boolean withinOpeningBalance(double parseDouble) {
 		return (parseDouble >= 1000 && parseDouble <= 10000);
+	}
+
+	@Override
+	public boolean openingBalance(double i) {
+		return (i >= 1000 && i <= 10000);
 	}
 }

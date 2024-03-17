@@ -10,13 +10,8 @@ public class Checking extends Account {
 	}
 
 	@Override
-	public String getApr() {
+	public double getApr() {
 		return apr;
-	}
-
-	@Override
-	String getBalance() {
-		return balance;
 	}
 
 	@Override
