@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class AccountTest {
 	public static final String ID = "12345678";
 	public static final String APR = "1%";
-	public static final String BALANCE = "0.0"
+	public static final String BALANCE = "0.0";
 	Cd cd;
 	Savings savings;
 	Checking checking;
