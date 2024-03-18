@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class CreateValidatorTest {
+public class CreateCommandValidatorTest {
 	public static final String ID = "12345678";
 	public static final String APR = "1";
 	public static final String BALANCE = "0";

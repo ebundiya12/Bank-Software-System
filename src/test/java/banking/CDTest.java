@@ -1,6 +1,6 @@
 package banking;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,16 +8,16 @@ import org.junit.jupiter.api.Test;
 public class CDTest {
 
 	public static final String ID = "12345678";
-	public static final String APR = "1%";
+	public static final String APR = "1.0";
 	public static final String BALANCE = "0.0";
-	public static final String TYPE = "cd";
+	public static final String TYPE = "Cd";
 	Cd cd;
 	Bank bank;
 
 	@BeforeEach
 	void setUp() {
-		cd = new Cd(ID, APR, BALANCE);
 		bank = new Bank();
+		cd = new Cd(ID, APR, BALANCE);
 	}
 
 	@Test
@@ -32,38 +32,42 @@ public class CDTest {
 
 	@Test
 	void cd_account_has_apr() {
-		assertEquals(APR, cd.getApr());
+		assertEquals(APR, Double.toString(cd.getApr()));
 	}
 
 	@Test
-	void cd_account_has_initial_balance() {
-		assertEquals(BALANCE, cd.getBalance());
-	}
-
-	@Test
-	void created_cd_account_is_stored_in_the_bank() {
+	void successfully_create_cd_account() {
 		cd.create(bank, ID, APR, BALANCE);
 		assertEquals(ID, bank.getAccounts().get(ID).getId());
 	}
 
 	@Test
-	void cd_deposit_deposits_correct_amount_to_account() {
-		cd.deposit(100);
-		assertEquals("100.0", cd.getBalance());
-
+	void cd_opening_balance_cannot_be_below_1000() {
+		boolean actual = cd.openingBalance(0);
+		assertFalse(actual);
 	}
 
 	@Test
-	void cd_withdraw_is_correct_when_there_is_enough_money_in_account() {
-		cd.deposit(100);
-		cd.withdraw(50);
-		assertEquals("50.0", cd.getBalance());
-
+	void cd_opening_balance_cannot_be_more_than_10000() {
+		boolean actual = cd.openingBalance(1000000);
+		assertFalse(actual);
 	}
 
 	@Test
-	void cd_cannot_withdraw_more_than_amount_in_account() {
-		cd.withdraw(50);
-		assertEquals(BALANCE, cd.getBalance());
+	void cd_account_can_be_opened_with_1000_balance() {
+		boolean actual = cd.openingBalance(1000);
+		assertTrue(actual);
+	}
+
+	@Test
+	void cd_account_can_be_opened_with_10000_balance() {
+		boolean actual = cd.openingBalance(10000);
+		assertTrue(actual);
+	}
+
+	@Test
+	void cd_account_does_not_allow_transfers() {
+		boolean actual = cd.allowsTransfer();
+		assertFalse(actual);
 	}
 }

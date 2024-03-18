@@ -2,39 +2,30 @@ package banking;
 
 public class Checking extends Account {
 
-	Checking(String id, String apr, String balance) {
-		super(id, apr, balance);
-	}
+    Checking(String id, String apr, String balance) {
+        super(id, apr, balance);
+    }
 
-	public void create(Bank bank, String id, String apr, String balance) {
-		all_accounts.add(new Checking(id, apr, balance));
-		bank.accounts.put(id, new Checking(id, apr, balance));
-	}
+    public void create(Bank bank, String id, String apr, String balance) {
+        bank.accounts.put(id, new Checking(id, apr, balance));
+    }
 
-	@Override
-	public String getApr() {
-		return apr;
-	}
+    @Override
+    public String type() {
+        return "Checking";
+    }
 
-	@Override
-	String getBalance() {
-		return balance;
-	}
+    @Override
+    public boolean withinMaximumDeposit(double amount) {
+        double max_deposit = 1000;
+        return (amount <= max_deposit && amount >= 0);
+    }
 
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
-	String type() {
-		return "checking";
-	}
-
-	@Override
-	public boolean withinMaximumDeposit(double amount) {
-		double max_deposit = 1000;
-		return (amount <= max_deposit && amount >= 0);
-	}
-
+    @Override
+    public boolean withinMaxWithdraw(double amount) {
+        double max_withdraw = 400;
+        return (amount <= max_withdraw && amount >= 0);
+    }
 }
+
+
