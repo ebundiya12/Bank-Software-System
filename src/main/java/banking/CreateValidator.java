@@ -1,3 +1,5 @@
+package banking;
+
 public class CreateValidator extends CommandValidator {
 
     public static final String CD_TYPE = "cd";
@@ -39,7 +41,7 @@ public class CreateValidator extends CommandValidator {
 
     public boolean validate_cd_creation(String type, String amt) {
         cd = new Cd("12345678", "1", "0");
-        return (type.equalsIgnoreCase(CD_TYPE) && cd.withinOpeningBalance(Double.parseDouble(amt)));
+        return (type.equalsIgnoreCase(CD_TYPE) && cd.openingBalance(Double.parseDouble(amt)));
     }
 
 }
