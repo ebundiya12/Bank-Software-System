@@ -1,3 +1,5 @@
+package banking;
+
 public class Savings extends Account {
 
 	Savings(String id, String apr, String balance) {

@@ -1,3 +1,5 @@
+package banking;
+
 public class Checking extends Account {
 
 	Checking(String id, String apr, String balance) {

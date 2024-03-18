@@ -1,3 +1,5 @@
+package banking;
+
 public class Cd extends Account {
 
 	Cd(String id, String apr, String balance) {
