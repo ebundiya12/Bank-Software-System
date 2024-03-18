@@ -1,44 +1,55 @@
 package banking;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-class Account {
+abstract class Account {
 
-	public List<Account> all_accounts;
-	protected String balance;
-	protected String apr;
+	public boolean withdrawn_month;
+	public int total_time = 0;
+	public List<String> transaction_history;
+	protected double balance;
+	protected double apr;
 	protected String id;
-	protected String type;
+	DecimalFormat decimalFormat;
 
-	Account(String id, String apr, String balance) {
-		this.balance = balance;
-		this.apr = apr;
+	Account(String id, String apr, String bal) {
+		decimalFormat = new DecimalFormat("0.00");
+		decimalFormat.setRoundingMode(RoundingMode.FLOOR);
+		this.balance = Double.parseDouble(decimalFormat.format(Double.parseDouble(bal)));
+		this.apr = Double.parseDouble(apr);
 		this.id = id;
-		all_accounts = new ArrayList<>();
+		transaction_history = new ArrayList<>();
 	}
 
-	static Account savings(String id, String apr, String balance) {
-		return new Savings(id, apr, balance);
+	public boolean openingBalance(double i) {
+		return (i == 0);
 	}
 
-	static Account checking(String id, String apr, String balance) {
-		return new Checking(id, apr, balance);
+	public void withdraw(double amount) {
+		if (amount <= balance) {
+			balance = balance - amount;
+		} else {
+			balance = 0;
+		}
 	}
 
-	static Account cd(String id, String apr, String balance) {
-		return new Checking(id, apr, balance);
+	public void deposit(double amount) {
+		this.balance += amount;
 	}
 
-	String type() {
-		return type;
+	public String type() {
+		return "Savings";
 	}
 
-	public String getApr() {
+	public double getApr() {
 		return apr;
 	}
 
-	String getBalance() {
+	double getBalance() {
+		balance = Double.parseDouble(decimalFormat.format(balance));
 		return balance;
 	}
 
@@ -46,35 +57,54 @@ class Account {
 		return id;
 	}
 
-	public void deposit(int amount) {
-		double bal = Double.parseDouble(balance);
-		bal += amount;
-		balance = Double.toString(bal);
-
+	public boolean withinMaximumDeposit(double amount) {
+		return false;
 	}
 
-	public void withdraw(int amount) {
-		double bal = Double.parseDouble(balance);
-		if (amount <= bal) {
-			bal = bal - amount;
-			balance = Double.toString(bal);
-		} else {
-			bal = 0;
-			balance = Double.toString(bal);
-			System.err.println("withdraw amount too high");
-		}
-
+	public boolean withinMaxWithdraw(double amount) {
+		double max_withdraw = getBalance();
+		return (amount >= max_withdraw);
 	}
 
 	public boolean allowsDeposit() {
 		return true;
 	}
 
-	public boolean withinMaximumDeposit(double amount) {
-		return false;
+	public boolean allowsTransfer() {
+		return true;
 	}
 
-	public boolean withinOpeningBalance(double parseDouble) {
-		return (parseDouble == 0);
+	public void calculate_apr() {
+		double account_apr = (getApr() / 100) / 12;
+		account_apr *= balance;
+		balance += account_apr;
+		balance = Double.parseDouble(decimalFormat.format(balance));
+	}
+
+	public void fee_collection() {
+		if (balance <= 25) {
+			balance = 0;
+		} else {
+			balance -= 25;
+		}
+	}
+
+	public boolean can_withdraw_this_month() {
+		return true;
+	}
+
+	public void get_account_status() {
+		String account_type = type();
+		String bal = decimalFormat.format(getBalance());
+		String account_apr = decimalFormat.format(getApr());
+		String account_id = getId();
+		String status = account_type + " " + account_id + " " + bal + " " + account_apr;
+
+		transaction_history.set(0, status);
+	}
+
+	public List<String> get_Transaction_history() {
+		get_account_status();
+		return transaction_history;
 	}
 }

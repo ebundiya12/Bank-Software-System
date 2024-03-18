@@ -1,15 +1,14 @@
 package banking;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class BankTest {
 	public static final String ID = "12345678";
-	public static final String APR = "1%";
-	public static final String BALANCE = "0";
+	public static final String APR = "1.0";
+	public static final String BALANCE = "0.0";
 	Bank bank;
 	Savings savings;
 	Cd cd;
@@ -35,7 +34,14 @@ public class BankTest {
 	}
 
 	@Test
-	void add_three_accounts_to_bank() {
+	void add_two_savings_accounts_to_bank() {
+		savings.create(bank, ID, APR, BALANCE);
+		savings.create(bank, ID + "1", APR, BALANCE);
+		assertEquals(ID + "1", bank.getAccounts().get(ID + "1").getId());
+	}
+
+	@Test
+	void add_three_different_accounts_to_bank() {
 		savings.create(bank, ID, APR, BALANCE);
 		checking.create(bank, ID + "1", APR, BALANCE);
 		cd.create(bank, ID + "2", APR, BALANCE);
@@ -43,19 +49,40 @@ public class BankTest {
 	}
 
 	@Test
-	void can_deposit_to_accounts_through_the_bank() {
-		savings.create(bank, ID, APR, BALANCE);
-		bank.account_deposit(ID, 100);
-		assertEquals("100.0", bank.getAccounts().get(ID).getBalance());
-
+	void can_deposit_into_an_account_through_bank() {
+		checking.create(bank, ID, APR, BALANCE);
+		bank.accountDeposit(ID, "400");
+		assertEquals(400.00, bank.getAccounts().get(ID).getBalance());
 	}
 
 	@Test
-	void can_withdraw_from_accounts_through_bank() {
+	void can_withdraw_from_an_account_through_bank() {
+		checking.create(bank, ID, APR, "400");
+		bank.accountWithdrawal(ID, "100");
+		assertEquals(300.00, bank.getAccounts().get(ID).getBalance());
+	}
+
+	@Test
+	void can_confirm_if_an_account_allows_transfers_through_bank() {
+		cd.create(bank, ID, APR, "500");
+		boolean actual = bank.accountTypeTransfers(ID);
+		assertFalse(actual);
+	}
+
+	@Test
+	void can_transfer_between_accounts_through_bank() {
+		String ID_2 = "98765432";
+		savings.create(bank, ID_2, APR, "500");
 		checking.create(bank, ID, APR, BALANCE);
-		bank.account_deposit(ID, 100);
-		bank.account_withdrawal(ID, 50);
-		assertEquals("50.0", bank.getAccounts().get(ID).getBalance());
+		bank.accountTransfer(ID_2, ID, "400");
+		assertEquals(400.00, bank.getAccounts().get(ID).getBalance());
+	}
+
+	@Test
+	void can_pass_time_of_accounts_through_bank() {
+		checking.create(bank, ID, APR, "400");
+		bank.passAccountsTime(1);
+		assertEquals(400.33, bank.getAccounts().get(ID).getBalance());
 	}
 
 }
