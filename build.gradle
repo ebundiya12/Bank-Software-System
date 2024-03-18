@@ -26,10 +26,9 @@ test {
 jacocoTestReport {
     reports {
         xml.enabled true
-        xml.outputLocation = project.layout.buildDirectory.file("builds/jacoco/jacoco.xml")
+        xml.destination = project.file("builds/jacoco/jacoco.xml")
     }
 }
-
 
 pitest {
     targetClasses = ['banking.*']
